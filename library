@@ -1,0 +1,93 @@
+books = [] 
+patrons = [] 
+checkouts = [] 
+  
+# Function to add a book 
+def add_book(book_id, title, author, year): 
+    book = {'book_id': book_id, 'title': title, 'author': author, 'year': year, 'available': True} 
+    books.append(book) 
+    print(f"Book '{title}' added successfully!") 
+  
+# Function to add a patron 
+def add_patron(patron_id, name): 
+    patron = {'patron_id': patron_id, 'name': name} 
+    patrons.append(patron) 
+    print(f"Patron '{name}' added successfully!") 
+  
+# Function to check out a book 
+def checkout_book(book_id, patron_id): 
+    for book in books: 
+        if book['book_id'] == book_id and book['available']: 
+            book['available'] = False 
+            checkout = {'book_id': book_id, 'patron_id': patron_id} 
+            checkouts.append(checkout) 
+            print(f"Book '{book['title']}' checked out by Patron ID {patron_id}") 
+            return 
+    print("Book not available for checkout") 
+  
+# Function to return a book 
+def return_book(book_id): 
+    for checkout in checkouts: 
+        if checkout['book_id'] == book_id: 
+            checkouts.remove(checkout) 
+            for book in books: 
+                if book['book_id'] == book_id: 
+                    book['available'] = True 
+                    print(f"Book '{book['title']}' returned successfully") 
+                    return 
+    print("Book not found in checkouts") 
+  
+# Function to search for a book 
+def search_books(search_term): 
+    found_books = [book for book in books if search_term.lower() in book['title'].lower() or search_term.lower() in book['author'].lower()] 
+    if found_books: 
+        for book in found_books: 
+            status = "Available" if book['available'] else "Checked Out" 
+            print(f"ID: {book['book_id']}, Title: {book['title']}, Author: {book['author']}, Year: {book['year']}, Status: {status}") 
+    else: 
+        print("No books found") 
+  
+# Function to display menu 
+def display_menu(): 
+    print("\nLibrary Management System") 
+    print("1. Add Book") 
+    print("2. Add Patron") 
+    print("3. Check Out Book") 
+    print("4. Return Book") 
+    print("5. Search Books") 
+    print("6. Exit") 
+  
+# Main function to run the prototype 
+def main(): 
+    while True: 
+        display_menu() 
+        choice = input("Enter your choice: ") 
+        if choice == '1': 
+            book_id = input("Enter Book ID: ") 
+            title = input("Enter Book Title: ") 
+            author = input("Enter Author: ") 
+            year = input("Enter Year of Publication: ") 
+            add_book(book_id, title, author, year) 
+        elif choice == '2': 
+            patron_id = input("Enter Patron ID: ") 
+            name = input("Enter Patron Name: ") 
+            add_patron(patron_id, name) 
+        elif choice == '3': 
+            book_id = input("Enter Book ID to check out: ") 
+            patron_id = input("Enter Patron ID: ") 
+            checkout_book(book_id, patron_id) 
+        elif choice == '4': 
+            book_id = input("Enter Book ID to return: ") 
+            return_book(book_id) 
+        elif choice == '5': 
+            search_term = input("Enter search term (title or author): ") 
+            search_books(search_term) 
+        elif choice == '6': 
+            print("Exiting the system. Goodbye!") 
+            break 
+        else: 
+            print("Invalid choice. Please try again.") 
+  
+if __name__ == "__main__": 
+    main() 
+ 
